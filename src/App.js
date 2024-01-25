@@ -16,19 +16,33 @@ export default function App() {
   const [showAddFriend, setShowAddFriend] = useState(false);
   function handleShowAddFriend() {
     setShowAddFriend((show) => !show);
+    setSelectedFriend(null);
+  }
+
+  const [selectedFriend, setSelectedFriend] = useState(null);
+  function handleFriendSelection(friend) {
+    // setSelectedFriend(friend);
+    setSelectedFriend((curFrined) =>
+      curFrined?.id === friend.id ? null : friend
+    );
+    setShowAddFriend(false);
   }
 
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendList friends={friends} />
+        <FriendList
+          friends={friends}
+          onSelection={handleFriendSelection}
+          selectedFriend={selectedFriend}
+        />
         {showAddFriend && <FormAddFriend onAddFriend={handleAddFriend} />}
         <Button onClick={handleShowAddFriend}>
           {showAddFriend ? "Close" : "Add friend"}
         </Button>
       </div>
 
-      <FormSplitBill />
+      {selectedFriend && <FormSplitBill selectedFriend={selectedFriend} />}
     </div>
   );
 }
